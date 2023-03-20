@@ -41,11 +41,12 @@ export class UserService {
           avatar: null,
         },
       });
+
       if (createUser) {
         const { password, ...user } = createUser;
         return {
           user,
-          token: this.issueTokens(createUser.id),
+          token: await this.issueTokens(createUser.id),
         };
       }
     } catch (error) {
@@ -117,11 +118,11 @@ export class UserService {
     }
   }
 
-  async editUserAvatar(filename: string, userar: { sub: number }) {
+  async editUserAvatar(filename: string, userar: { user: { id: number } }) {
     try {
       const editUserAvatar = await this.prisma.user.update({
         where: {
-          id: userar.sub,
+          id: userar.user.id,
         },
         data: {
           avatar: filename,
@@ -139,11 +140,11 @@ export class UserService {
       };
     }
   }
-  async editUser(dto: UpdateUserDto, userar: { sub: number }) {
+  async editUser(dto: UpdateUserDto, userar: { user: { id: number } }) {
     try {
       const isUser = await this.prisma.user.findUnique({
         where: {
-          id: userar.sub,
+          id: userar.user.id,
         },
       });
       if (!isUser) {
@@ -153,7 +154,7 @@ export class UserService {
       }
       const editUser = await this.prisma.user.update({
         where: {
-          id: userar.sub,
+          id: userar.user.id,
         },
         data: {
           email: dto.email,
@@ -173,11 +174,11 @@ export class UserService {
       };
     }
   }
-  async editPassword(password: string, userar: { sub: number }) {
+  async editPassword(password: string, userar: { user: { id: number } }) {
     try {
       const isUser = await this.prisma.user.findUnique({
         where: {
-          id: userar.sub,
+          id: userar.user.id,
         },
       });
       if (!isUser) {
@@ -189,7 +190,7 @@ export class UserService {
       const hash = await bcrypt.hash(password, salt);
       const passwordSend = await this.prisma.user.update({
         where: {
-          id: userar.sub,
+          id: userar.user.id,
         },
         data: {
           password: hash,
