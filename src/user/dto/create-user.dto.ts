@@ -11,9 +11,6 @@ export class CreateUserDto {
   name: string;
 
   @IsString()
-  @MaxLength(30, {
-    message: 'Пароль не должен превышать 30 символов',
-  })
   @MinLength(5, {
     message: 'Пароль должен быть не менее 5 символов',
   })

@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { UserModule } from './user/user.module';
 import { join } from 'path';
+import { ToDoModule } from './to-do/to-do.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { join } from 'path';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'upload'),
     }),
+    ToDoModule,
   ],
   controllers: [AppController],
   providers: [AppService],
